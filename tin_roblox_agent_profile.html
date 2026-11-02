@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin Roblox Agent Profile — AI Agent Specification</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#131c2e',
+                            900: '#0b1120',
+                            950: '#060a12',
+                        },
+                        brand: {
+                            blue: '#3b82f6',
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e',
+                            purple: '#8b5cf6'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'Menlo', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b1120;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .glass-card {
+            background: rgba(18, 26, 43, 0.75);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+        .flow-node {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            transition: all 0.2s ease;
+        }
+        .flow-node:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2);
+        }
+        .flow-line {
+            stroke: #334155;
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 4;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: -100; }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 font-sans min-h-screen antialiased selection:bg-brand-blue selection:text-white pb-20">
+
+    <!-- Glowing Top Background Accent -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-brand-blue/15 via-brand-purple/5 to-transparent blur-3xl pointer-events-none -z-10"></div>
+
+    <!-- STICKY TOP NAVBAR -->
+    <nav class="sticky top-0 z-50 bg-slate-900/80 backdrop-filter backdrop-blur-xl border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-blue to-brand-cyan flex items-center justify-center text-white shadow-md shadow-brand-blue/20">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <span class="font-bold text-white text-base sm:text-lg tracking-tight">Tin Roblox Agent</span>
+                <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-blue/10 text-brand-blue border border-brand-blue/30">
+                    Hermes OS
+                </span>
+            </div>
+
+            <!-- Quick Navigation & Language Toggle -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <div class="hidden md:flex items-center gap-4 text-xs font-medium text-slate-400">
+                    <a href="#about" class="hover:text-white transition">Overview</a>
+                    <a href="#tools" class="hover:text-white transition">Tools</a>
+                    <a href="#workflow" class="hover:text-white transition">Workflow</a>
+                    <a href="#diagram" class="hover:text-white transition">Diagram</a>
+                    <a href="#boundaries" class="hover:text-white transition">Rules</a>
+                </div>
+
+                <!-- Dual-Language Toggle Button -->
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 hover:border-slate-500 text-xs font-semibold text-slate-200 transition">
+                    <i class="fa-solid fa-globe text-brand-cyan"></i>
+                    <span id="langText">VI / EN</span>
+                </button>
+
+                <a href="#trigger" class="px-3.5 py-1.5 rounded-lg bg-brand-blue hover:bg-blue-600 text-white text-xs font-bold transition shadow-md shadow-brand-blue/20">
+                    Run Agent
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+
+        <!-- HEADER SECTION -->
+        <header class="mb-8" id="about">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <div>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                            Tin Roblox Agent Profile
+                        </h1>
+                    </div>
+                    <p class="text-slate-400 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed lang-en">
+                        An automated AI Agent that monitors Vietnamese TikTok content for Roblox news, synthesizes key highlights, and posts structured updates directly into Lark Documents.
+                    </p>
+                    <p class="text-slate-400 text-sm sm:text-base mt-2 max-w-3xl leading-relaxed lang-vi hidden">
+                        AI Agent tự động tìm kiếm video TikTok tiếng Việt về Roblox, tóm tắt ý chính và ghi kết quả vào tài liệu Lark "Roblox Highlights".
+                    </p>
+                </div>
+            </div>
+
+            <!-- One-Sentence Definition Banner -->
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-brand-blue shadow-lg">
+                <div class="flex items-start gap-3.5">
+                    <div class="p-2 rounded-lg bg-brand-blue/10 text-brand-blue mt-0.5">
+                        <i class="fa-solid fa-thumbtack text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-blue block mb-1">
+                            <span class="lang-en">One-Sentence Definition</span>
+                            <span class="lang-vi hidden">Định nghĩa một câu</span>
+                        </span>
+                        <p class="text-slate-100 text-sm sm:text-base font-medium leading-relaxed lang-en">
+                            When requested to update Roblox news, the Agent automatically finds 2–3 recent Vietnamese TikTok videos, extracts video transcript summaries, and appends them to the Lark Document "Roblox Highlights".
+                        </p>
+                        <p class="text-slate-100 text-sm sm:text-base font-medium leading-relaxed lang-vi hidden">
+                            Khi nhận yêu cầu cập nhật tin Roblox, Agent tự động tìm 2–3 video TikTok tiếng Việt phù hợp, tóm tắt ý chính rồi ghi vào tài liệu Lark "Roblox Highlights".
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT SECTIONS -->
+        <div class="space-y-8">
+
+            <!-- SECTION 1: WHAT IT IS -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2.5 mb-4">
+                    <span class="text-brand-amber"><i class="fa-solid fa-lightbulb"></i></span>
+                    <span class="lang-en">What Is It</span>
+                    <span class="lang-vi hidden">Nó là gì?</span>
+                </h2>
+                <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                    <p class="lang-en">
+                        <strong class="text-white font-semibold">Tin Roblox Agent</strong> is an AI Digital Employee built using <code class="bg-slate-800 text-brand-cyan px-2 py-0.5 rounded border border-slate-700">Hermes Agent Platform</code> connected with <code class="bg-slate-800 text-brand-cyan px-2 py-0.5 rounded border border-slate-700">Lark Bot</code>. It operates like a digital executive assistant dedicated to Roblox trend discovery and content intelligence aggregation.
+                    </p>
+                    <p class="lang-vi hidden">
+                        <strong class="text-white font-semibold">Tin Roblox Agent</strong> là nhân viên số AI được xây dựng trên nền tảng <code class="bg-slate-800 text-brand-cyan px-2 py-0.5 rounded border border-slate-700">Hermes Agent</code> kết nối với <code class="bg-slate-800 text-brand-cyan px-2 py-0.5 rounded border border-slate-700">Lark Bot</code>. Nó đóng vai trò như một trợ lý tự động chuyên tìm kiếm và tổng hợp xu hướng tin tức Roblox.
+                    </p>
+                    <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800 text-xs sm:text-sm text-slate-400 flex items-start gap-3">
+                        <i class="fa-solid fa-shield-halved text-brand-emerald text-base mt-0.5"></i>
+                        <span class="lang-en">It doesn't replace human editorial decision-making, but saves you from hours of manual video scrolling, subtitle note-taking, and Lark document formatting.</span>
+                        <span class="lang-vi hidden">Nó không thay thế đánh giá của người dùng, nhưng giúp tiết kiệm toàn bộ thời gian lướt TikTok, đọc phụ đề và trình bày văn bản thủ công.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: TIME SAVED / COMPARISON TABLE -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2.5 mb-5">
+                    <span class="text-brand-rose"><i class="fa-solid fa-stopwatch"></i></span>
+                    <span class="lang-en">Manual Effort Saved</span>
+                    <span class="lang-vi hidden">Tiết kiệm thời gian & Công sức</span>
+                </h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-700/80 text-slate-400 text-xs uppercase tracking-wider font-semibold">
+                                <th class="pb-3 pl-2">
+                                    <span class="lang-en">Task / Workflow Step</span>
+                                    <span class="lang-vi hidden">Nhiệm vụ</span>
+                                </th>
+                                <th class="pb-3 px-4">
+                                    <span class="lang-en">Before (Manual)</span>
+                                    <span class="lang-vi hidden">Trước đây (Thủ công)</span>
+                                </th>
+                                <th class="pb-3 pr-2">
+                                    <span class="lang-en">Now (AI Agent)</span>
+                                    <span class="lang-vi hidden">Bây giờ (AI Agent)</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/80 text-slate-300">
+                            <tr>
+                                <td class="py-3.5 pl-2 font-medium">Search TikTok using keyword "rb"</td>
+                                <td class="py-3.5 px-4 text-slate-400">15 mins</td>
+                                <td class="py-3.5 pr-2 font-semibold text-brand-emerald flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-emerald"></i> Automated Scrape
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 pl-2 font-medium">Filter recent relevant Roblox content</td>
+                                <td class="py-3.5 px-4 text-slate-400">10 mins</td>
+                                <td class="py-3.5 pr-2 font-semibold text-brand-emerald flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-emerald"></i> Auto Metric Filter
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 pl-2 font-medium">Watch video, read subtitles & summarize</td>
+                                <td class="py-3.5 px-4 text-slate-400">15 mins</td>
+                                <td class="py-3.5 pr-2 font-semibold text-brand-emerald flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-emerald"></i> AI Transcript Summary
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="py-3.5 pl-2 font-medium">Format & append to Lark Document</td>
+                                <td class="py-3.5 px-4 text-slate-400">15 mins</td>
+                                <td class="py-3.5 pr-2 font-semibold text-brand-emerald flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-brand-emerald"></i> Auto Lark Write
+                                </td>
+                            </tr>
+                            <tr class="bg-slate-800/50 font-bold rounded-lg">
+                                <td class="py-4 pl-3 text-white rounded-l-lg">Total Time Per Execution</td>
+                                <td class="py-4 px-4 text-brand-rose">~60 mins / week</td>
+                                <td class="py-4 pr-3 text-brand-cyan rounded-r-lg">~5 mins (Review only)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTION 3: TOOLS USED -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl" id="tools">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2.5 mb-5">
+                    <span class="text-brand-purple"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                    <span class="lang-en">Tools & Integrations</span>
+                    <span class="lang-vi hidden">Công cụ kết nối</span>
+                </h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-brand-purple/15 text-brand-purple flex items-center justify-center text-lg font-bold">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-sm">Hermes Platform</h3>
+                                <span class="text-[11px] text-slate-500 uppercase font-mono">Core Execution</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed lang-en">
+                            Houses the Agent profile, manages tool scheduling, context state, and automated workflow routines.
+                        </p>
+                        <p class="text-xs text-slate-400 leading-relaxed lang-vi hidden">
+                            Nền tảng vận hành Agent, quản lý hồ sơ công việc, trạng thái tác vụ và điều phối quy trình tự động.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-brand-blue/15 text-brand-blue flex items-center justify-center text-lg font-bold">
+                                <i class="fa-solid fa-file-word"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-sm">Lark Doc & Bot</h3>
+                                <span class="text-[11px] text-slate-500 uppercase font-mono">Workspace Storage</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed lang-en">
+                            Receives commands, authenticates write access, and logs formatted bullet-point summaries under "Roblox Highlights".
+                        </p>
+                        <p class="text-xs text-slate-400 leading-relaxed lang-vi hidden">
+                            Kết nối với Lark workspace, ghi tóm tắt dạng gạch đầu dòng vào tài liệu "Roblox Highlights" theo từng ngày.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-brand-cyan/15 text-brand-cyan flex items-center justify-center text-lg font-bold">
+                                <i class="fa-brands fa-tiktok"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-sm">TikTok Scraper API</h3>
+                                <span class="text-[11px] text-slate-500 uppercase font-mono">Data Source</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed lang-en">
+                            Searches video feeds, extracts engagement metrics (likes/comments), and retrieves subtitle transcripts.
+                        </p>
+                        <p class="text-xs text-slate-400 leading-relaxed lang-vi hidden">
+                            Tìm kiếm video TikTok theo từ khóa "rb", phân tích lượt tương tác và trích xuất phụ đề video.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-brand-emerald/15 text-brand-emerald flex items-center justify-center text-lg font-bold">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-sm">LLM Summarizer</h3>
+                                <span class="text-[11px] text-slate-500 uppercase font-mono">AI Reasoning</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed lang-en">
+                            Summarizes raw video spoken audio/subtitles accurately in clear Vietnamese, omitting fluff.
+                        </p>
+                        <p class="text-xs text-slate-400 leading-relaxed lang-vi hidden">
+                            Tóm tắt nội dung phụ đề ngắn gọn, chính xác theo tiếng Việt, không suy diễn thông tin ngoài video.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: INPUT & DATA DEFINITION -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2.5 mb-4">
+                    <span class="text-brand-cyan"><i class="fa-solid fa-right-to-bracket"></i></span>
+                    <span class="lang-en">Input Specification</span>
+                    <span class="lang-vi hidden">Đầu vào (Inputs)</span>
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase">Topic</span>
+                        <div class="text-sm font-bold text-white mt-0.5">Roblox Gaming</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase">Keyword</span>
+                        <div class="text-sm font-mono font-bold text-brand-amber mt-0.5">"rb", "roblox"</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase">Language</span>
+                        <div class="text-sm font-bold text-brand-cyan mt-0.5">Vietnamese</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase">Time Horizon</span>
+                        <div class="text-sm font-bold text-white mt-0.5">Last 2–3 Days (Priority)</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase">Selection Limit</span>
+                        <div class="text-sm font-bold text-brand-emerald mt-0.5">Max 2–3 videos / run</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase">Target Document</span>
+                        <div class="text-sm font-bold text-brand-blue mt-0.5">Lark "Roblox Highlights"</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: PROCESSING ACTIONS WORKFLOW -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl" id="workflow">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2.5 mb-5">
+                    <span class="text-brand-blue"><i class="fa-solid fa-list-ol"></i></span>
+                    <span class="lang-en">Processing Action Steps</span>
+                    <span class="lang-vi hidden">Các bước xử lý công việc</span>
+                </h2>
+
+                <div class="space-y-3">
+                    <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                        <span class="w-7 h-7 rounded-lg bg-brand-blue/20 text-brand-blue font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">01</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded bg-brand-rose/20 text-brand-rose border border-brand-rose/30">MUST</span>
+                                <h3 class="text-sm font-bold text-white">Search TikTok for Roblox news</h3>
+                            </div>
+                            <p class="text-xs text-slate-400 lang-en">Initiate search query on TikTok using keyword "rb" targeting Vietnamese creators.</p>
+                            <p class="text-xs text-slate-400 lang-vi hidden">Tìm kiếm video TikTok tiếng Việt về chủ đề Roblox bằng từ khóa "rb".</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                        <span class="w-7 h-7 rounded-lg bg-brand-blue/20 text-brand-blue font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">02</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded bg-brand-rose/20 text-brand-rose border border-brand-rose/30">MUST</span>
+                                <h3 class="text-sm font-bold text-white">Filter video relevance & freshness</h3>
+                            </div>
+                            <p class="text-xs text-slate-400 lang-en">Check Roblox domain indicators. Prioritize videos published in the past 2–3 days.</p>
+                            <p class="text-xs text-slate-400 lang-vi hidden">Kiểm tra dấu hiệu có liên quan Roblox. Ưu tiên video mới đăng 2–3 ngày gần đây.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                        <span class="w-7 h-7 rounded-lg bg-brand-blue/20 text-brand-blue font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">03</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded bg-brand-amber/20 text-brand-amber border border-brand-amber/30">SHOULD</span>
+                                <h3 class="text-sm font-bold text-white">Rank engagement & pick top 2–3</h3>
+                            </div>
+                            <p class="text-xs text-slate-400 lang-en">Compare like count and comments to select maximum 2–3 outstanding videos.</p>
+                            <p class="text-xs text-slate-400 lang-vi hidden">So sánh lượt thả tim và bình luận để chọn ra tối đa 2–3 video nổi bật nhất.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                        <span class="w-7 h-7 rounded-lg bg-brand-blue/20 text-brand-blue font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">04</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded bg-brand-rose/20 text-brand-rose border border-brand-rose/30">MUST</span>
+                                <h3 class="text-sm font-bold text-white">Extract transcript & summarize highlights</h3>
+                            </div>
+                            <p class="text-xs text-slate-400 lang-en">Open candidate video, read subtitles/speech, and generate bullet points without extrapolation.</p>
+                            <p class="text-xs text-slate-400 lang-vi hidden">Mở video, đọc phụ đề và tóm tắt ý chính cùng điểm nổi bật dạng gạch đầu dòng.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                        <span class="w-7 h-7 rounded-lg bg-brand-blue/20 text-brand-blue font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">05</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded bg-brand-rose/20 text-brand-rose border border-brand-rose/30">MUST</span>
+                                <h3 class="text-sm font-bold text-white">Append entry into Lark Doc</h3>
+                            </div>
+                            <p class="text-xs text-slate-400 lang-en">Write title, video link, and summary bullet points grouped by date under "Roblox Highlights".</p>
+                            <p class="text-xs text-slate-400 lang-vi hidden">Ghi tiêu đề, đường link và tóm tắt vào tài liệu Lark theo từng nhóm ngày.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                        <span class="w-7 h-7 rounded-lg bg-brand-blue/20 text-brand-blue font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">06</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2 py-0.5 text-[10px] font-extrabold rounded bg-brand-rose/20 text-brand-rose border border-brand-rose/30">MUST</span>
+                                <h3 class="text-sm font-bold text-white">Verify document format</h3>
+                            </div>
+                            <p class="text-xs text-slate-400 lang-en">Re-read written document contents to verify link validity, formatting, and formatting cleanliness.</p>
+                            <p class="text-xs text-slate-400 lang-vi hidden">Đọc lại nội dung vừa ghi để xác nhận bố cục, link và tính đầy đủ.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: VISUAL PROCESS FLOWCHART DIAGRAM -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl" id="diagram">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2.5">
+                        <span class="text-brand-emerald"><i class="fa-solid fa-diagram-project"></i></span>
+                        <span class="lang-en">Interactive Process Diagram (Level 3 Logic)</span>
+                        <span class="lang-vi hidden">Sơ đồ Quy trình Vận hành (Cấp 3)</span>
+                    </h2>
+                    <span class="text-xs text-slate-400 font-mono">Mermaid Workflow Render</span>
+                </div>
+
+                <!-- Visual Interactive Flowchart -->
+                <div class="bg-slate-950/70 rounded-2xl p-6 border border-slate-800/80 overflow-x-auto">
+                    <div class="min-w-[640px] flex flex-col items-center space-y-4">
+                        
+                        <!-- START NODE -->
+                        <div class="flow-node px-6 py-2.5 rounded-full text-xs font-bold text-brand-cyan border-brand-cyan/40 bg-brand-cyan/10 flex items-center gap-2">
+                            <i class="fa-solid fa-play"></i> START: Trigger Request
+                        </div>
+
+                        <div class="w-0.5 h-6 bg-slate-700"></div>
+
+                        <!-- STEP 1 NODE -->
+                        <div class="flow-node px-5 py-3 rounded-xl text-xs text-center max-w-sm text-slate-200">
+                            <div class="font-bold text-white mb-0.5">Search TikTok with Keyword "rb"</div>
+                            <div class="text-[11px] text-slate-400">Fetch Vietnamese Roblox video feed</div>
+                        </div>
+
+                        <div class="w-0.5 h-6 bg-slate-700"></div>
+
+                        <!-- DECISION 1: RELEVANCE -->
+                        <div class="flow-node px-5 py-3 rounded-xl text-xs text-center border-brand-amber/50 bg-brand-amber/5 max-w-xs">
+                            <div class="font-bold text-brand-amber mb-1">Related to Roblox?</div>
+                            <div class="flex justify-between gap-8 mt-2 pt-2 border-t border-slate-700/60 text-[11px]">
+                                <span class="text-brand-rose font-bold"><i class="fa-solid fa-xmark"></i> NO</span>
+                                <span class="text-brand-emerald font-bold"><i class="fa-solid fa-check"></i> YES</span>
+                            </div>
+                        </div>
+
+                        <!-- BRANCH SPLIT 1 -->
+                        <div class="w-full max-w-md flex justify-between items-start text-xs text-slate-400">
+                            <div class="flex flex-col items-center w-1/2">
+                                <div class="w-0.5 h-6 bg-brand-rose/60"></div>
+                                <div class="flow-node p-3 rounded-xl border-brand-rose/40 bg-brand-rose/10 text-brand-rose text-center text-[11px]">
+                                    Report to user & skip video
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center w-1/2">
+                                <div class="w-0.5 h-6 bg-brand-emerald/60"></div>
+                                <div class="flow-node p-3 rounded-xl border-brand-emerald/40 bg-brand-emerald/10 text-slate-200 text-center text-[11px] w-56">
+                                    Prioritize recent & engagement metrics -> Pick top 2–3
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-0.5 h-6 bg-slate-700"></div>
+
+                        <!-- DECISION 2: CAN OPEN VIDEO -->
+                        <div class="flow-node px-5 py-3 rounded-xl text-xs text-center border-brand-amber/50 bg-brand-amber/5 max-w-xs">
+                            <div class="font-bold text-brand-amber mb-1">Can video be opened?</div>
+                            <div class="flex justify-between gap-8 mt-2 pt-2 border-t border-slate-700/60 text-[11px]">
+                                <span class="text-brand-rose font-bold"><i class="fa-solid fa-xmark"></i> NO</span>
+                                <span class="text-brand-emerald font-bold"><i class="fa-solid fa-check"></i> YES</span>
+                            </div>
+                        </div>
+
+                        <!-- BRANCH SPLIT 2 -->
+                        <div class="w-full max-w-md flex justify-between items-start text-xs text-slate-400">
+                            <div class="flex flex-col items-center w-1/2">
+                                <div class="w-0.5 h-6 bg-brand-rose/60"></div>
+                                <div class="flow-node p-3 rounded-xl border-brand-rose/40 bg-brand-rose/10 text-brand-rose text-center text-[11px]">
+                                    Report error & skip link
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center w-1/2">
+                                <div class="w-0.5 h-6 bg-brand-emerald/60"></div>
+                                <div class="flow-node p-3 rounded-xl border-brand-blue/40 bg-slate-800 text-slate-200 text-center text-[11px] w-56">
+                                    Read subtitles & summarize bullet highlights
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-0.5 h-6 bg-slate-700"></div>
+
+                        <!-- UPDATE LARK DOC -->
+                        <div class="flow-node px-5 py-3 rounded-xl text-xs text-center max-w-sm text-slate-200">
+                            <div class="font-bold text-white mb-0.5">Append summary & link into Lark Doc</div>
+                            <div class="text-[11px] text-brand-blue">"Roblox Highlights"</div>
+                        </div>
+
+                        <div class="w-0.5 h-6 bg-slate-700"></div>
+
+                        <!-- DECISION 3: SUCCESS CHECK -->
+                        <div class="flow-node px-5 py-3 rounded-xl text-xs text-center border-brand-amber/50 bg-brand-amber/5 max-w-xs">
+                            <div class="font-bold text-brand-amber mb-1">Update Successful?</div>
+                            <div class="flex justify-between gap-8 mt-2 pt-2 border-t border-slate-700/60 text-[11px]">
+                                <span class="text-brand-rose font-bold"><i class="fa-solid fa-xmark"></i> NO</span>
+                                <span class="text-brand-emerald font-bold"><i class="fa-solid fa-check"></i> YES</span>
+                            </div>
+                        </div>
+
+                        <!-- BRANCH SPLIT 3 -->
+                        <div class="w-full max-w-md flex justify-between items-start text-xs text-slate-400">
+                            <div class="flex flex-col items-center w-1/2">
+                                <div class="w-0.5 h-6 bg-brand-rose/60"></div>
+                                <div class="flow-node p-3 rounded-xl border-brand-rose/40 bg-brand-rose/10 text-brand-rose text-center text-[11px]">
+                                    Report error & STOP
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center w-1/2">
+                                <div class="w-0.5 h-6 bg-brand-emerald/60"></div>
+                                <div class="flow-node px-6 py-2.5 rounded-full text-xs font-bold text-brand-emerald border-brand-emerald/40 bg-brand-emerald/10 flex items-center gap-2">
+                                    <i class="fa-solid fa-check-double"></i> FINISH SUCCESS
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: CAPABILITIES vs BOUNDARIES -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl" id="boundaries">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2.5 mb-5">
+                    <span class="text-brand-emerald"><i class="fa-solid fa-shield-cat"></i></span>
+                    <span class="lang-en">Capabilities & Operational Boundaries</span>
+                    <span class="lang-vi hidden">Phạm vi Hoạt động (Được làm / Không làm)</span>
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Can Do -->
+                    <div class="bg-emerald-950/20 p-5 rounded-2xl border border-brand-emerald/25">
+                        <h3 class="font-bold text-brand-emerald text-sm mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-base"></i>
+                            <span class="lang-en">CAN DO (Allowed Actions)</span>
+                            <span class="lang-vi hidden">ĐƯỢC LÀM (Cho phép)</span>
+                        </h3>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-300">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-brand-emerald mt-1"></i>
+                                <span class="lang-en">Automatically pull Vietnamese TikTok video transcripts with keyword "rb".</span>
+                                <span class="lang-vi hidden">Tự động tìm kiếm & lấy thông tin video TikTok Roblox bằng từ khóa "rb".</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-brand-emerald mt-1"></i>
+                                <span class="lang-en">Filter content by engagement (likes/comments) and publication time.</span>
+                                <span class="lang-vi hidden">Lọc video theo thời gian đăng (2-3 ngày) và độ tương tác nổi bật.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-brand-emerald mt-1"></i>
+                                <span class="lang-en">Synthesize key highlights in bullet points and write to Lark Doc.</span>
+                                <span class="lang-vi hidden">Tóm tắt phụ đề ngắn gọn dạng gạch đầu dòng và tự động ghi vào Lark Doc.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-brand-emerald mt-1"></i>
+                                <span class="lang-en">Notify user if errors occur during video loading or Lark write operations.</span>
+                                <span class="lang-vi hidden">Báo cáo cho người dùng nếu video bị lỗi hoặc không cập nhật được tài liệu.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Cannot Do -->
+                    <div class="bg-rose-950/20 p-5 rounded-2xl border border-brand-rose/25">
+                        <h3 class="font-bold text-brand-rose text-sm mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-xmark text-base"></i>
+                            <span class="lang-en">CANNOT DO (Out of Scope)</span>
+                            <span class="lang-vi hidden">KHÔNG LÀM (Ngoại lệ)</span>
+                        </h3>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-300">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-xmark text-brand-rose mt-1"></i>
+                                <span class="lang-en">Do not invent or extrapolate news outside the video transcript.</span>
+                                <span class="lang-vi hidden">Không tự suy diễn hoặc thêm bớt thông tin nằm ngoài nội dung video.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-xmark text-brand-rose mt-1"></i>
+                                <span class="lang-en">Do not comment or interact directly on TikTok videos.</span>
+                                <span class="lang-vi hidden">Không bình luận hoặc tương tác trực tiếp trên các video TikTok.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-xmark text-brand-rose mt-1"></i>
+                                <span class="lang-en">Do not modify original Lark document permissions or raw settings.</span>
+                                <span class="lang-vi hidden">Không tự thay đổi dữ liệu gốc hoặc cấu hình phân quyền tài liệu Lark.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-xmark text-brand-rose mt-1"></i>
+                                <span class="lang-en">Do not assert unverified video claims as proven facts.</span>
+                                <span class="lang-vi hidden">Không khẳng định thông tin chưa được kiểm chứng độc lập là sự thật.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 8: HOW TO TRIGGER & SIMULATOR -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl" id="trigger">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2.5 mb-4">
+                    <span class="text-brand-purple"><i class="fa-solid fa-terminal"></i></span>
+                    <span class="lang-en">How to Trigger Agent</span>
+                    <span class="lang-vi hidden">Cách Kích Hoạt Agent</span>
+                </h2>
+
+                <p class="text-sm text-slate-300 mb-3 lang-en">
+                    Tag the agent bot in your Lark chat workspace or copy the command prompt below:
+                </p>
+                <p class="text-sm text-slate-300 mb-3 lang-vi hidden">
+                    Gửi tin nhắn cho Bot trong ứng dụng Lark hoặc sao chép câu lệnh bên dưới:
+                </p>
+
+                <!-- Command Code Copy Box -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-sm flex items-center justify-between gap-4 mb-4">
+                    <span class="text-brand-cyan truncate" id="agentCommand">@Tin Roblox Agent Update Roblox Highlights</span>
+                    <button onclick="copyCommand()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-sans font-bold flex items-center gap-1.5 shrink-0 transition">
+                        <i class="fa-regular fa-copy" id="copyIcon"></i>
+                        <span id="copyBtnText">Copy</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-2 text-xs text-slate-400">
+                    <i class="fa-regular fa-clock text-brand-amber"></i>
+                    <span class="lang-en">Automated Schedule: Programmed to run periodically every Friday at 17:00 PM.</span>
+                    <span class="lang-vi hidden">Lịch chạy tự động: Đã thiết lập tự chạy định kỳ vào 17:00 chiều Thứ Sáu hàng tuần.</span>
+                </div>
+            </section>
+
+            <!-- SECTION 9: GUARDRAILS & MANUAL FALLBACKS -->
+            <section class="glass-card rounded-2xl p-6 shadow-xl border-l-4 border-l-brand-amber">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2.5 mb-3">
+                    <span class="text-brand-amber"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                    <span class="lang-en">Manual Fallbacks & Exception Handling</span>
+                    <span class="lang-vi hidden">Dự phòng Thủ công & Xử lý Ngoại lệ</span>
+                </h2>
+
+                <ul class="space-y-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-angle-right text-brand-amber mt-1"></i>
+                        <span><strong class="text-white">Video link broken:</strong> Report error directly to the user chat and skip that specific link.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-angle-right text-brand-amber mt-1"></i>
+                        <span><strong class="text-white">Document permissions locked:</strong> Notify user immediately and pause execution.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-angle-right text-brand-amber mt-1"></i>
+                        <span><strong class="text-white">Unverified statements:</strong> Clearly tag items as "Video Creator Speech" rather than verified facts.</span>
+                    </li>
+                </ul>
+            </section>
+
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="mt-14 text-center text-xs text-slate-500 border-t border-slate-800/80 pt-6">
+            <p>Tin Roblox Agent Profile Specification • Hermes Agent Platform & Lark Integration</p>
+        </footer>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC FOR LANGUAGE TOGGLE & COPY FUNCTION -->
+    <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            const enElements = document.querySelectorAll('.lang-en');
+            const viElements = document.querySelectorAll('.lang-vi');
+            
+            if (currentLang === 'en') {
+                enElements.forEach(el => el.classList.add('hidden'));
+                viElements.forEach(el => el.classList.remove('hidden'));
+                document.getElementById('langText').innerText = 'EN / VI';
+                currentLang = 'vi';
+            } else {
+                viElements.forEach(el => el.classList.add('hidden'));
+                enElements.forEach(el => el.classList.remove('hidden'));
+                document.getElementById('langText').innerText = 'VI / EN';
+                currentLang = 'en';
+            }
+        }
+
+        function copyCommand() {
+            const commandText = document.getElementById('agentCommand').innerText;
+            const btnText = document.getElementById('copyBtnText');
+            const copyIcon = document.getElementById('copyIcon');
+
+            // Fallback execCommand for iframe compatibility
+            const textarea = document.createElement('textarea');
+            textarea.value = commandText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                btnText.innerText = 'Copied!';
+                copyIcon.className = 'fa-solid fa-check text-brand-emerald';
+                setTimeout(() => {
+                    btnText.innerText = 'Copy';
+                    copyIcon.className = 'fa-regular fa-copy';
+                }, 2000);
+            } catch (err) {
+                console.error('Copy failed', err);
+            }
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>
